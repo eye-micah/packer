@@ -1,0 +1,9 @@
+instance-id: ubuntu-server
+local-hostname: ubuntu-server
+network:
+    version: 2
+    ethernets:
+        nics:
+            match:
+                name: ens*
+            dhcp4: yes

@@ -1,0 +1,59 @@
+---
+- name: Provision out Ubuntu VM
+  hosts: all
+  remote_user: ubuntu
+  become: true
+
+  tasks:
+    - name: Disable ufw
+      shell: "sudo ufw disable"
+
+    - name: Stop/disable snapd
+      systemd:
+        name: snapd.service
+        state: stopped
+        enabled: false
+
+    - name: Remove snap
+      apt:
+        name: snapd
+        state: absent
+        purge: true
+        autoremove: true
+
+    - name: Block snap installation
+      copy:
+        dest: /etc/apt/preferences.d/nosnaps.conf
+        owner: root
+        group: root
+        mode: "0440"
+        content: |
+          Package: snapd
+          Pin: release a=*
+          Pin-Priority: -10
+
+    - name: Disable dynamic MOTD
+      pamd:
+        name: sshd
+        type: session
+        control: optional
+        module_path: pam_motd.so
+        state: absent
+
+    - name: Disable MOTD by making scripts non-executable
+      shell: chmod -x /etc/update-motd.d/*
+
+    - name: Hushlogin for default user
+      file:
+        state: touch
+        path: ~/.hushlogin
+
+    - name: Disable Ubuntu Advantage
+      systemd:
+        name: ubuntu-advantage
+        state: stopped
+        enabled: false
+
+    - name: K3s server install
+      shell: |
+         curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='server' sh -s - --flannel-backend none --token 12345

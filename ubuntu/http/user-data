@@ -1,0 +1,31 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: en_US
+  keyboard:
+    layout: us
+  identity:
+    hostname: ubuntu-server
+    password: "$5$AQtHMwBGlESWNZi4$v2jAMxzLiKroiUBPLISHppT9t4Q8ntFYgpDlZwqfgg8"
+    username: ubuntu
+  ssh:
+    allow-pw: true
+    install-server: true
+    ssh_quiet_keygen: true
+    disable_root: true
+  packages:
+    - qemu-guest-agent
+    - sudo
+    - python3
+    - curl
+  storage:
+    layout:
+      name: direct
+    swap:
+      size: 0
+  user-data:
+    users:
+      - name: ubuntu
+        sudo: "ALL=(ALL) NOPASSWD:ALL"
+      
+    
