@@ -23,7 +23,7 @@
 
     - name: Block snap installation
       copy:
-        dest: /etc/apt/preferences.d/nosnaps.conf
+        dest: /etc/apt/preferences.d/99-nosnaps
         owner: root
         group: root
         mode: "0440"

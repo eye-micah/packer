@@ -18,6 +18,9 @@ main () {
         agent)
             packer build -force agent.pkr.hcl
             ;;
+        zfs)
+            packer build -force zfs.pkr.hcl
+            ;;
         *)
             echo: "Error: Unknown command $command"
             usage
